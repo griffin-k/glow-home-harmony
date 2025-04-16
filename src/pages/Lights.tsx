@@ -9,12 +9,11 @@ const Lights = () => {
   const [controlState, setControlState] = useState<Record<string, boolean>>({});
   
   const lightsList = [
-    { id: "light1", name: "Living Room" },
-    { id: "light2", name: "Kitchen" },
-    { id: "light3", name: "Master Bedroom" },
-    { id: "light4", name: "Bathroom" },
-    { id: "light5", name: "Hallway" },
-    { id: "light6", name: "Office" },
+    { id: "light1", name: "Light1" },
+    { id: "light2", name: "Light3" },
+    { id: "light3", name: "Light3" },
+    { id: "light4", name: "Light4" },
+
   ];
   
   useEffect(() => {
@@ -48,8 +47,10 @@ const Lights = () => {
   return (
     <Layout>
       <BackButton to="/" />
-      <h1 className="text-3xl font-bold mb-6 text-smarthome-primary">Lights Control</h1>
-      
+      <h1 className="text-3xl font-bold mb-6 text-center text-smarthome-primary">Lights Control</h1>
+      <div className="flex justify-center mb-4">
+  <hr className="w-16 border-t-4 border-green-800 mb-6 rounded" />
+</div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {lightsList.map((light) => (
           <LightToggleCard

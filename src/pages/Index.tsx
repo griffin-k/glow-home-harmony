@@ -23,7 +23,10 @@ const Index = () => {
   return (
     <Layout>
       <section className="mb-8">
-        <h2 className="text-2xl font-semibold mb-4 text-smarthome-primary">Sensors</h2>
+      <h2 className="text-2xl font-semibold text-center mb-2 text-smarthome-primary">Sensor</h2>
+<div className="flex justify-center mb-4">
+  <hr className="w-16 border-t-4 border-green-800 rounded" />
+</div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <SensorCard
             title="Temperature"
@@ -55,7 +58,11 @@ const Index = () => {
       </section>
 
       <section>
-        <h2 className="text-2xl font-semibold mb-4 text-smarthome-primary">Controls</h2>
+      <h2 className="text-2xl font-semibold text-center mb-2 text-smarthome-primary">Controls</h2>
+<div className="flex justify-center mb-4">
+  <hr className="w-16 border-t-4 border-green-800 rounded" />
+</div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <ControlCard
             title="Lights Control"

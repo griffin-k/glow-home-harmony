@@ -1,7 +1,3 @@
-
-// This is a mock service to simulate Firebase functionality
-// In a real app, this would be replaced with actual Firebase integration
-
 interface SensorData {
   temperature: number;
   humidity: number;

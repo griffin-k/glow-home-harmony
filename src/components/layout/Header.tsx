@@ -1,6 +1,4 @@
-
 import { Link } from "react-router-dom";
-import { User, Home } from "lucide-react";
 import { useSpring, animated } from "@react-spring/web";
 
 const Header = () => {
@@ -13,17 +11,32 @@ const Header = () => {
 
   return (
     <header className="sticky top-0 z-10 glass px-4 py-3 flex items-center justify-between mb-6 shadow-sm">
-      <animated.div style={logoSpring}>
-        <Link to="/" className="flex items-center gap-2 text-2xl font-semibold text-smarthome-primary">
-          <Home className="w-6 h-6" />
-          <span>Smart Home Dashboard</span>
+      {/* Left – LGU Logo */}
+      <animated.div style={logoSpring} className="flex items-center">
+        <Link to="/" className="w-12 h-12 sm:w-16 sm:h-16">
+          <img
+            src="https://student.lgu.edu.pk/Content/logo.png"
+            alt="LGU Logo"
+            className="w-full h-full object-contain"
+          />
         </Link>
       </animated.div>
-      <div className="flex items-center">
-        <button className="w-10 h-10 rounded-full bg-white/30 backdrop-blur-sm flex items-center justify-center hover:bg-white/50 transition-all duration-300">
-          <User className="w-6 h-6 text-smarthome-primary" />
-        </button>
-      </div>
+
+      {/* Center – Page Title */}
+      <h1 className="text-xl sm:text-2xl font-bold text-smarthome-primary">
+        Smart Conference Room
+      </h1>
+
+      {/* Right – DFRCS Logo */}
+      <animated.div style={logoSpring} className="flex items-center">
+        <Link to="/" className="w-24 sm:w-32 md:w-40">
+          <img
+            src="https://i.ibb.co/679S8m7f/DFRCS-LOG.png"
+            alt="DFRCS Logo"
+            className="w-full h-auto object-contain"
+          />
+        </Link>
+      </animated.div>
     </header>
   );
 };
