@@ -1,27 +1,52 @@
-
-import { useState } from "react";
+import React, { useState } from "react";
 import { Lightbulb } from "lucide-react";
-import { Switch } from "@/components/ui/switch";
-import { cn } from "@/lib/utils";
+import { Switch } from "@/components/ui/switch"; // adjust if needed
+import { cn } from "@/lib/utils"; // adjust if needed
 
+// ✅ Firebase Setup
+import { initializeApp } from "firebase/app";
+import { getDatabase, ref, set } from "firebase/database";
+
+// ✅ Your Firebase config
+const firebaseConfig = {
+  apiKey: "AIzaSyALgmMR6B22JBUrGOj9OjnOOVuk6yImi3Q",
+  authDomain: "confrnce-cb336.firebaseapp.com",
+  databaseURL: "https://confrnce-cb336-default-rtdb.firebaseio.com",
+  projectId: "confrnce-cb336",
+  storageBucket: "confrnce-cb336.appspot.com",
+  messagingSenderId: "479608003523",
+  appId: "1:479608003523:web:5aebafb19ff0f4fb6c3b76"
+};
+
+// ✅ Initialize Firebase once
+const app = initializeApp(firebaseConfig);
+const database = getDatabase(app);
+
+// ✅ Component Props
 interface LightToggleCardProps {
-  name: string;
+  name: string; // "Light1", "Buzzer", etc.
   initialState?: boolean;
-  onToggle?: (isOn: boolean) => void;
 }
 
-const LightToggleCard = ({ 
-  name, 
-  initialState = false, 
-  onToggle 
-}: LightToggleCardProps) => {
+// ✅ Component
+const LightToggleCard = ({ name, initialState = false }: LightToggleCardProps) => {
   const [isOn, setIsOn] = useState(initialState);
 
   const handleToggle = (checked: boolean) => {
     setIsOn(checked);
-    if (onToggle) {
-      onToggle(checked);
-    }
+
+    const status = checked ? "ON" : "OFF";
+    const dbPath = `Controls/${name}`;
+
+    console.log(`🟡 Updating Firebase at "${dbPath}" => ${status}`);
+
+    set(ref(database, dbPath), status)
+      .then(() => {
+        console.log(`✅ Successfully updated "${dbPath}" to ${status}`);
+      })
+      .catch((error) => {
+        console.error("❌ Firebase update failed:", error);
+      });
   };
 
   return (

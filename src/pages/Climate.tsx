@@ -1,52 +1,57 @@
-
+import { useEffect, useState } from "react";
 import Layout from "@/components/layout/Layout";
 import ClimateControlCard from "@/components/controls/ClimateControlCard";
 import BackButton from "@/components/navigation/BackButton";
-import { mockFirebase } from "@/services/mockFirebase";
-import { useEffect, useState } from "react";
 
-interface ControlState {
-  [key: string]: boolean | number;
-}
+import { initializeApp } from "firebase/app";
+import { getDatabase, ref, onValue, set } from "firebase/database";
+
+// Firebase config
+const firebaseConfig = {
+  apiKey: "AIzaSyALgmMR6B22JBUrGOj9OjnOOVuk6yImi3Q",
+  authDomain: "confrnce-cb336.firebaseapp.com",
+  databaseURL: "https://confrnce-cb336-default-rtdb.firebaseio.com",
+  projectId: "confrnce-cb336",
+  storageBucket: "confrnce-cb336.appspot.com",
+  messagingSenderId: "479608003523",
+  appId: "1:479608003523:web:5aebafb19ff0f4fb6c3b76"
+};
+
+const app = initializeApp(firebaseConfig);
+const database = getDatabase(app);
 
 const Climate = () => {
-  const [controlState, setControlState] = useState<ControlState>({});
-  
-  const climateControls = [
-    { id: "fan1", name: "Living Room Fan", type: "fan" as const },
-    { id: "fan2", name: "Bedroom Fan", type: "fan" as const },
-    { id: "ac1", name: "Living Room AC", type: "ac" as const },
-    { id: "ac2", name: "Bedroom AC", type: "ac" as const },
+  const [controlState, setControlState] = useState<Record<string, boolean>>({});
+
+  const fanList = [
+    { id: "Light4", name: "Fan 1" },
+    { id: "Light5", name: "Fan 2" },
+    { id: "Light6", name: "Fan 3" },
+    { id: "Light7", name: "Fan 4" },
   ];
-  
+
   useEffect(() => {
-    // Initialize control states
-    const initialState: ControlState = {};
-    climateControls.forEach(control => {
-      const state = mockFirebase.getControlState(control.id);
-      const levelState = mockFirebase.getControlState(`${control.id}_level`);
-      
-      if (state !== null) initialState[control.id] = state;
-      if (levelState !== null) initialState[`${control.id}_level`] = levelState;
+    const controlsRef = ref(database, "Controls");
+
+    const unsubscribe = onValue(controlsRef, (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        const newState: Record<string, boolean> = {};
+        for (const key in data) {
+          newState[key] = data[key] === "ON";
+        }
+        setControlState(newState);
+      }
     });
-    setControlState(initialState);
-    
-    // Subscribe to control state changes
-    const unsubscribe = mockFirebase.onDataChange("controls", (data) => {
-      setControlState(prevState => ({ ...prevState, ...data }));
-    });
-    
-    return unsubscribe;
+
+    return () => unsubscribe();
   }, []);
 
   const handleToggle = (id: string, state: boolean) => {
-    console.log(`Climate control ${id} toggled: ${state ? "ON" : "OFF"}`);
-    mockFirebase.updateControlState(id, state);
-  };
-
-  const handleLevelChange = (id: string, level: number) => {
-    console.log(`Climate control ${id} level changed to: ${level}`);
-    mockFirebase.updateControlState(`${id}_level`, level);
+    const status = state ? "ON" : "OFF";
+    set(ref(database, `Controls/${id}`), status)
+      .then(() => console.log(`✅ ${id} set to ${status}`))
+      .catch((err) => console.error(`❌ Error updating ${id}:`, err));
   };
 
   return (
@@ -54,18 +59,15 @@ const Climate = () => {
       <BackButton to="/" />
       <h1 className="text-3xl font-bold mb-6 text-center text-smarthome-primary">Climate Control</h1>
       <div className="flex justify-center mb-4">
-  <hr className="w-16 border-t-4 border-green-800 mb-6 rounded" />
-</div>
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {climateControls.map((control) => (
+        <hr className="w-16 border-t-4 border-green-800 mb-6 rounded" />
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {fanList.map((fan) => (
           <ClimateControlCard
-            key={control.id}
-            type={control.type}
-            name={control.name}
-            initialState={!!controlState[control.id]}
-            initialLevel={Number(controlState[`${control.id}_level`]) || 3}
-            onToggle={(state) => handleToggle(control.id, state)}
-            onLevelChange={(level) => handleLevelChange(control.id, level)}
+            key={fan.id}
+            id={fan.id}
+            name={fan.name}
+            initialState={!!controlState[fan.id]}
           />
         ))}
       </div>
