@@ -25,9 +25,10 @@ const Lights = () => {
   const [controlState, setControlState] = useState<Record<string, boolean>>({});
 
   const lightsList = [
-    { id: "Light1", name: "Light1" },
-    { id: "Light2", name: "Light2" },
-    { id: "Light3", name: "Light3" },
+    { id: "Light1", name: "Light 1" },
+    { id: "Light2", name: "Light 2" },
+    { id: "Light3", name: "Light 3" },
+    { id: "Light8", name: "Light 4" }, // ✅ Newly added light
   ];
 
   useEffect(() => {
