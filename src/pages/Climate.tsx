@@ -24,8 +24,8 @@ const Climate = () => {
   const [controlState, setControlState] = useState<Record<string, boolean>>({});
 
   const fanList = [
-    { id: "fan1", name: "Fan 1" },
-    { id: "fan2", name: "Fan 2" },
+    { id: "Light1", name: "Fan 1" },
+    { id: "Light2", name: "Fan 2" },
     { id: "fan3", name: "Fan 3" },
     { id: "fan4", name: "Fan 4" },
   ];
