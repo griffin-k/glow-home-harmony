@@ -18,17 +18,19 @@ const firebaseConfig = {
   appId: "1:479608003523:web:5aebafb19ff0f4fb6c3b76"
 };
 
+// ✅ Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
 
 const Lights = () => {
   const [controlState, setControlState] = useState<Record<string, boolean>>({});
 
+  // ✅ Light ID for Firebase, name for UI
   const lightsList = [
     { id: "Light1", name: "Light 1" },
     { id: "Light2", name: "Light 2" },
     { id: "Light3", name: "Light 3" },
-    { id: "Light8", name: "Light 4" }, // ✅ Newly added light
+    { id: "Light4", name: "Light 4" },
   ];
 
   useEffect(() => {
@@ -66,9 +68,9 @@ const Lights = () => {
         {lightsList.map((light) => (
           <LightToggleCard
             key={light.id}
-            name={light.name}
+            id={light.id} // Firebase path: Light1
+            name={light.name} // UI: Light 1
             initialState={!!controlState[light.id]}
-            onToggle={(state) => handleLightToggle(light.id, state)}
           />
         ))}
       </div>

@@ -24,10 +24,10 @@ const Climate = () => {
   const [controlState, setControlState] = useState<Record<string, boolean>>({});
 
   const fanList = [
-    { id: "Light4", name: "Fan 1" },
-    { id: "Light5", name: "Fan 2" },
-    { id: "Light6", name: "Fan 3" },
-    { id: "Light7", name: "Fan 4" },
+    { id: "fan1", name: "Fan 1" },
+    { id: "fan2", name: "Fan 2" },
+    { id: "fan3", name: "Fan 3" },
+    { id: "fan4", name: "Fan 4" },
   ];
 
   useEffect(() => {
@@ -68,6 +68,7 @@ const Climate = () => {
             id={fan.id}
             name={fan.name}
             initialState={!!controlState[fan.id]}
+            onToggle={handleToggle}
           />
         ))}
       </div>

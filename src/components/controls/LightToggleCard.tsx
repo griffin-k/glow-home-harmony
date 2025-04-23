@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { Lightbulb } from "lucide-react";
-import { Switch } from "@/components/ui/switch"; // adjust if needed
-import { cn } from "@/lib/utils"; // adjust if needed
+import { Switch } from "@/components/ui/switch";
+import { cn } from "@/lib/utils";
 
-// ✅ Firebase Setup
+// ✅ Firebase setup
 import { initializeApp } from "firebase/app";
 import { getDatabase, ref, set } from "firebase/database";
 
-// ✅ Your Firebase config
+// ✅ Firebase config
 const firebaseConfig = {
   apiKey: "AIzaSyALgmMR6B22JBUrGOj9OjnOOVuk6yImi3Q",
   authDomain: "confrnce-cb336.firebaseapp.com",
@@ -18,25 +18,23 @@ const firebaseConfig = {
   appId: "1:479608003523:web:5aebafb19ff0f4fb6c3b76"
 };
 
-// ✅ Initialize Firebase once
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
 
-// ✅ Component Props
+// ✅ Props
 interface LightToggleCardProps {
-  name: string; // "Light1", "Buzzer", etc.
+  id: string;     // Firebase key e.g., Light1
+  name: string;   // Display name e.g., Light 1
   initialState?: boolean;
 }
 
-// ✅ Component
-const LightToggleCard = ({ name, initialState = false }: LightToggleCardProps) => {
+const LightToggleCard = ({ id, name, initialState = false }: LightToggleCardProps) => {
   const [isOn, setIsOn] = useState(initialState);
 
   const handleToggle = (checked: boolean) => {
     setIsOn(checked);
-
     const status = checked ? "ON" : "OFF";
-    const dbPath = `Controls/${name}`;
+    const dbPath = `Controls/${id}`;
 
     console.log(`🟡 Updating Firebase at "${dbPath}" => ${status}`);
 
