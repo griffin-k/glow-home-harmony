@@ -52,6 +52,14 @@ const Lights = () => {
 
   const handleLightToggle = (id: string, state: boolean) => {
     const status = state ? "ON" : "OFF";
+
+    // Update local state immediately to reflect the toggle action
+    setControlState((prevState) => ({
+      ...prevState,
+      [id]: state
+    }));
+
+    // Update Firebase
     set(ref(database, `Controls/${id}`), status)
       .then(() => console.log(`✅ ${id} set to ${status}`))
       .catch((err) => console.error(`❌ Error updating ${id}:`, err));
@@ -70,7 +78,8 @@ const Lights = () => {
             key={light.id}
             id={light.id} // Firebase path: Light1
             name={light.name} // UI: Light 1
-            initialState={!!controlState[light.id]}
+            initialState={controlState[light.id] ?? false}
+            onToggle={handleLightToggle} // Pass the toggle handler
           />
         ))}
       </div>

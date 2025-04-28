@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Fan } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
@@ -24,13 +24,19 @@ interface ClimateControlCardProps {
   id: string;      // Firebase ID (e.g., Light4)
   name: string;    // Display name (e.g., Fan 1)
   initialState?: boolean;
+  onToggle: (id: string, state: boolean) => void;  // Added callback to parent
 }
 
-const ClimateControlCard = ({ id, name, initialState = false }: ClimateControlCardProps) => {
+const ClimateControlCard = ({ id, name, initialState = false, onToggle }: ClimateControlCardProps) => {
   const [isOn, setIsOn] = useState(initialState);
+
+  useEffect(() => {
+    setIsOn(initialState);
+  }, [initialState]);
 
   const handleToggle = (checked: boolean) => {
     setIsOn(checked);
+    onToggle(id, checked);  // Pass state change back to parent
 
     const status = checked ? "ON" : "OFF";
     const dbPath = `Controls/${id}`;

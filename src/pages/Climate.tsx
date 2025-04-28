@@ -38,7 +38,8 @@ const Climate = () => {
       if (data) {
         const newState: Record<string, boolean> = {};
         for (const key in data) {
-          newState[key] = data[key] === "ON";
+          // Ensure we're correctly handling the case of "ON" or "OFF"
+          newState[key] = data[key] === "ON"; // This logic ensures the value is a boolean
         }
         setControlState(newState);
       }
@@ -49,6 +50,14 @@ const Climate = () => {
 
   const handleToggle = (id: string, state: boolean) => {
     const status = state ? "ON" : "OFF";
+
+    // Update local state immediately to reflect the toggle action
+    setControlState((prevState) => ({
+      ...prevState,
+      [id]: state
+    }));
+
+    // Update Firebase
     set(ref(database, `Controls/${id}`), status)
       .then(() => console.log(`✅ ${id} set to ${status}`))
       .catch((err) => console.error(`❌ Error updating ${id}:`, err));
@@ -67,7 +76,7 @@ const Climate = () => {
             key={fan.id}
             id={fan.id}
             name={fan.name}
-            initialState={!!controlState[fan.id]}
+            initialState={controlState[fan.id] ?? false}  // Ensure it uses the latest state from Firebase
             onToggle={handleToggle}
           />
         ))}

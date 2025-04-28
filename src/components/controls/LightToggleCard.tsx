@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Lightbulb } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
@@ -26,13 +26,20 @@ interface LightToggleCardProps {
   id: string;     // Firebase key e.g., Light1
   name: string;   // Display name e.g., Light 1
   initialState?: boolean;
+  onToggle: (id: string, state: boolean) => void;  // Added callback to parent
 }
 
-const LightToggleCard = ({ id, name, initialState = false }: LightToggleCardProps) => {
+const LightToggleCard = ({ id, name, initialState = false, onToggle }: LightToggleCardProps) => {
   const [isOn, setIsOn] = useState(initialState);
+
+  useEffect(() => {
+    setIsOn(initialState);
+  }, [initialState]);
 
   const handleToggle = (checked: boolean) => {
     setIsOn(checked);
+    onToggle(id, checked);  // Send the state change to the parent
+
     const status = checked ? "ON" : "OFF";
     const dbPath = `Controls/${id}`;
 
