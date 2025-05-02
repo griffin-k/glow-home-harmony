@@ -25,7 +25,7 @@ const Climate = () => {
 
   const fanList = [
     { id: "Light1", name: "Fan 1" },
-    { id: "Light2", name: "Fan 2" },
+    { id: "fan2", name: "Fan 2" },
     { id: "fan3", name: "Fan 3" },
     { id: "fan4", name: "Fan 4" },
   ];
