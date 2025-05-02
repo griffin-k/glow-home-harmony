@@ -25,10 +25,10 @@ const database = getDatabase(app);
 const Lights = () => {
   const [controlState, setControlState] = useState<Record<string, boolean>>({});
 
-  // ✅ Light ID for Firebase, name for UI
+
   const lightsList = [
     { id: "Light1", name: "Light 1" },
-    { id: "fan1", name: "Light 2" },
+    { id: "Light2", name: "Light 2" },
     { id: "Light3", name: "Light 3" },
     { id: "Light4", name: "Light 4" },
   ];
